@@ -11,10 +11,11 @@ ml-recommender-prod/
 │
 ├── app.py                       # API entrypoint (Flask/FastAPI app)
 │
-├── kafka-docker/                # Kafka streaming module
+├── kafka-docker/                # Kafka streaming and containerization module
 │   ├── consumer.py              # Consumes Kafka topics & writes Parquet snapshots
 │   ├── producer.py              # (Optional) Produces sample Kafka messages
 │   ├── docker-compose.yml       # Spins up Kafka + Zookeeper
+│   ├── Dockerfile               # Builds and containerizes the recommender API for Azure deployment
 │   ├── requirements.txt         # Python dependencies
 │
 ├── probes/                      # System monitoring and API probes
