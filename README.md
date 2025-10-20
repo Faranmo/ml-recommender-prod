@@ -22,8 +22,8 @@ ml-recommender-prod/
 │   ├── probe.py                 # Performs health checks and tests message flow
 │   ├── probe_metrics.py         # Logs metrics: latency, success rate, etc.
 │
-├── data/
-│   └── snapshots/               # Versioned Parquet data snapshots
+├── data/                        # Local storage for Kafka snapshot outputs (not committed)
+│   └── snapshots/               # Auto-generated Parquet files written by consumer.py
 │
 └── ml-ai-prod-starter-repo-1/   # Base starter files
 
