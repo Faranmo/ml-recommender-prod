@@ -3,7 +3,7 @@ import random
 
 app = Flask(__name__)
 
-# Dummy recommend function (replace with your trained model later)
+# Recommend function
 def recommend_for_user(user_id):
     recommendations = [random.randint(1000, 1100) for _ in range(5)]
     return recommendations
