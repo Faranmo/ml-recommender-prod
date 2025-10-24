@@ -10,6 +10,7 @@ This project implements an **end-to-end machine-learning recommender system** th
 ml-recommender-prod/
 │
 ├── app.py                       # API entrypoint (Flask/FastAPI app)
+├── model_train.py               # For model comparison and training
 │
 ├── kafka-docker/                # Kafka streaming and containerization module
 │   ├── consumer.py              # Consumes Kafka topics & writes Parquet snapshots
