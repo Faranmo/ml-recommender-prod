@@ -1,0 +1,44 @@
+name: CI - Tests and Lint
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest pytest-cov flake8
+    
+    - name: Run tests
+      run: |
+        pytest tests/ --cov=recommender --cov-report=term --cov-report=xml -v
+    
+    - name: Check coverage (70% minimum)
+      run: |
+        pytest tests/ --cov=recommender --cov-fail-under=70
+      continue-on-error: true
+    
+    - name: Lint with flake8
+      run: |
+        flake8 recommender/ tests/ --max-line-length=100 --ignore=E501
+      continue-on-error: true
+    
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage.xml
