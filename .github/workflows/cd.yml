@@ -1,0 +1,59 @@
+ame: CD - Deploy to Azure
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: flixstream-api
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest
+    
+    - name: Run tests before deploy
+      run: |
+        pytest tests/ -v
+    
+    - name: Build Docker image
+      run: |
+        cd kafka-docker
+        docker build -t flixstream-api:${{ github.sha }} .
+    
+    - name: Log in to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.AZURE_REGISTRY_URL }}
+        username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+        password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+    
+    - name: Push to Azure Container Registry
+      run: |
+        docker tag flixstream-api:${{ github.sha }} ${{ secrets.AZURE_REGISTRY_URL }}/flixstream-api:latest
+        docker push ${{ secrets.AZURE_REGISTRY_URL }}/flixstream-api:latest
+    
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: '${{ secrets.AZURE_REGISTRY_URL }}/flixstream-api:latest'
+    
+    - name: Health check
+      run: |
+        sleep 30
+        curl -f https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/ || exit 1
