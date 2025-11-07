@@ -1,0 +1,15 @@
+Flask
+pandas
+scikit-learn
+numpy
+scikit-surprise
+psutil
+kafka-python
+pyarrow
+fastparquet
+pandera
+redis
+pytest>=7.2.0
+pytest-cov>=4.0.0
+flake8>=6.0.0
+scipy>=1.9.0
