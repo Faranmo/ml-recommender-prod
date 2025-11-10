@@ -1,7 +1,7 @@
 Flask
 pandas
 scikit-learn
-numpy
+numpy<2
 scikit-surprise
 psutil
 kafka-python
