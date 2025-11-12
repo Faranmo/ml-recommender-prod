@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-11-12T04:51:04.216840",
+  "health": {
+    "status": "UP",
+    "status_code": 200,
+    "response_time_ms": 81.997
+  },
+  "performance": {
+    "total_requests": 5,
+    "successes": 5,
+    "failures": 0,
+    "success_rate": 1.0,
+    "avg_latency_ms": 59.34123992919922,
+    "p50_latency_ms": 58.61639976501465,
+    "p95_latency_ms": null,
+    "max_latency_ms": 65.04082679748535
+  },
+  "sla_metrics": {
+    "uptime": true,
+    "latency_sla_met": true,
+    "availability_sla_met": true
+  }
+}
