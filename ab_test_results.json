@@ -1,0 +1,22 @@
+{
+  "model_a": {
+    "name": "Popularity",
+    "coverage": 0.8333,
+    "satisfied_users": 41,
+    "total_users": 50
+  },
+  "model_b": {
+    "name": "Item-CF",
+    "coverage": 1.0,
+    "satisfied_users": 50,
+    "total_users": 50
+  },
+  "statistical_test": {
+    "metric": "Coverage",
+    "z_score": 3.1448545101657563,
+    "p_value": 0.0016616944579834758,
+    "alpha": 0.05,
+    "significant": true
+  },
+  "decision": "Deploy Model B (Item-CF)"
+}
