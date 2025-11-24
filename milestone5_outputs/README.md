@@ -1,6 +1,6 @@
 # Milestone 5 Deliverables
 
-**Team:** [YOUR TEAM NAME]
+**Team:** Project Group 6
 **Date:** November 24, 2025
 **Repository:** ml-recommender-prod
 
