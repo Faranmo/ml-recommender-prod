@@ -70,7 +70,11 @@ We analyzed our Kafka telemetry data. The results show both fairness requirement
 - Gini coefficient: 0.229 (low inequality)
 - Parity gap: 0.018 (target: <0.15) ✓
 
-See the plots: fairness_popularity_bias.png and fairness_model_parity.png
+**Popularity Bias Analysis:**
+![Fairness Popularity Bias](fairness_popularity_bias.png)
+
+**Model-Level Parity Analysis:**
+![Fairness Model Parity](fairness_model_parity.png)
 
 ---
 
@@ -100,7 +104,11 @@ Used Kafka logs to detect both loops:
 
 **Echo Chamber:** Analyzed recommendations over 4 time windows. Concentration increasing from T1 to T4 (Gini: 0.267 → 0.308, Top-10 share: 28% → 33.6%). Echo detected ⚠️
 
+![Feedback Loop Popularity Echo](feedback_loop_popularity_echo.png)
+
 **Tail Starvation:** Head items get 80% recommendation rate vs 52% for tail items. Ratio of 1.54x shows some starvation happening ⚠️
+
+![Feedback Loop Tail Starvation](feedback_loop_tail_starvation.png)
 
 **Mitigations deployed:**
 - Automatic retraining every 3 hours prevents bias accumulation
@@ -151,7 +159,7 @@ We simulated a spam attack and tested our detection:
 
 Attack successfully detected ✓
 
-See security_rating_spam_detection.png for breakdown.
+![Security Rating Spam Detection](security_rating_spam_detection.png)
 
 **Currently implemented mitigations:**
 1. Pandera schema validation for Kafka ✓
