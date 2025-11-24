@@ -1,0 +1,29 @@
+{
+  "threat_model": {
+    "Kafka": [
+      "Message Injection: Fake events \u2192 Mitigation: Schema validation (Pandera)",
+      "Unauthorized Access: Rogue consumers \u2192 Mitigation: SASL auth, ACLs",
+      "Data Tampering: Modified messages \u2192 Mitigation: TLS/SSL encryption"
+    ],
+    "API": [
+      "Rate Abuse: Excessive requests \u2192 Mitigation: Rate limiting (100/min)",
+      "Model Inference Attack: Reverse engineering \u2192 Mitigation: Query limits",
+      "Injection Attacks: SQL/NoSQL \u2192 Mitigation: Input validation"
+    ],
+    "Registry": [
+      "Model Poisoning: Backdoored models \u2192 Mitigation: Cryptographic signing",
+      "Unauthorized Access: IP theft \u2192 Mitigation: Access control, encryption",
+      "Supply Chain: Compromised deps \u2192 Mitigation: Dependency pinning"
+    ]
+  },
+  "rating_spam": {
+    "total_users": 100,
+    "spam_detected": 4,
+    "flagged_users": [
+      "spam_4",
+      "spam_5",
+      "spam_6",
+      "spam_7"
+    ]
+  }
+}
