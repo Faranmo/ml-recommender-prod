@@ -1,0 +1,181 @@
+=====================================================
+MILESTONE 5 - POWERPOINT SLIDE CONTENT
+=====================================================
+Copy this content into your PowerPoint slides
+=====================================================
+
+SLIDE 1: TITLE
+--------------
+Milestone 5: Responsible ML Analysis
+Production ML Recommender System
+
+Team: Project Group 6
+- Faran Mohammed
+- Rahman Mohammed Abdul
+- Aigerim Mendygaliyeva
+
+=====================================================
+
+SLIDE 2: SYSTEM ARCHITECTURE
+-----------------------------
+Production ML Pipeline
+
+Kafka Streaming
+↓
+Flask API (app.py)
+↓
+Model Registry (versioned models)
+↓
+Prometheus Monitoring
+↓
+Automated Retraining (every 3 hours)
+
+Technologies:
+• Kafka for event streaming
+• Docker for containerization
+• GitHub Actions for CI/CD
+• Collaborative filtering (KNN)
+• A/B testing infrastructure
+
+=====================================================
+
+SLIDE 3: FAIRNESS ANALYSIS
+---------------------------
+System-Level Requirement: Catalog Coverage
+• Target: ≥80% of catalog items in recommendations
+• Result: 100% coverage ✓
+• Metric: Coverage = unique recommended items / total items
+
+Model-Level Requirement: Diversity Parity
+• Target: Parity gap <0.15 across user segments
+• Result: 0.018 parity gap ✓
+• Metric: max(diversity) - min(diversity) across low/medium/high activity users
+
+Gini Coefficient: 0.229 (low inequality)
+
+[INSERT: fairness_popularity_bias.png and fairness_model_parity.png]
+
+=====================================================
+
+SLIDE 4: FEEDBACK LOOPS DETECTED
+---------------------------------
+Loop 1: Popularity Echo Chamber
+• Popular items → more recs → more views → even more popular
+• Detection: Gini coefficient slope over time
+• Result: Gini slope = +0.0146 ⚠️ (echo detected)
+• Concentration increasing from 26.7% to 30.8%
+
+Loop 2: Long-Tail Starvation
+• New items → no data → no predictions → stuck
+• Detection: Head/Tail recommendation rate ratio
+• Result: 1.54x ratio ⚠️ (some starvation)
+• Head items: 80% rec rate vs Tail: 52%
+
+Mitigations:
+• 3-hour auto-retraining prevents bias accumulation
+• A/B testing diversity improvements
+
+[INSERT: feedback_loop_popularity_echo.png and feedback_loop_tail_starvation.png]
+
+=====================================================
+
+SLIDE 5: SECURITY THREAT MODEL
+-------------------------------
+Kafka Threats:
+• Message injection → Mitigation: Schema validation (Pandera) ✓
+• Unauthorized access → Need: SASL authentication
+• Data tampering → Need: TLS encryption
+
+API Threats:
+• Rate abuse → Need: Rate limiting (100/min)
+• Model inference attacks → Mitigation: Query limits
+• SQL injection → Mitigation: Input validation ✓
+
+Model Registry Threats:
+• Model poisoning → Need: Cryptographic signing
+• Supply chain attacks → Mitigation: Dependency pinning ✓
+
+Rating Spam Attack Demo:
+• Simulated 100 users, 10 spammers
+• Detection: 3-sigma outlier detection
+• Result: All 10 spam users detected ✓
+
+[INSERT: security_rating_spam_detection.png]
+
+=====================================================
+
+SLIDE 6: DEMO WALKTHROUGH
+--------------------------
+Live System Features:
+1. API Endpoints
+   • /recommend - Get personalized recommendations
+   • /rate - Submit ratings
+   • /watch - Track watch events
+   • /metrics - View Prometheus metrics
+
+2. A/B Testing
+   • Model A: 83% coverage
+   • Model B: 100% coverage
+   • Statistical test: p=0.0017 (Model B wins)
+
+3. Monitoring
+   • 99%+ uptime SLA met
+   • <100ms latency
+   • Real-time drift detection
+
+4. Automated Retraining
+   • Runs every 3 hours
+   • New model versions tracked in registry
+
+=====================================================
+
+SLIDE 7: KEY LEARNINGS & REFLECTION
+------------------------------------
+Hardest Parts:
+• Kafka offset management (exactly-once semantics)
+• Schema evolution without breaking consumers
+• Cold-start problem for new users/items
+• Backpressure handling with high message volumes
+
+System Fragilities:
+• Single Kafka broker (no replication)
+• 3-hour retraining window causes staleness
+• No authentication on endpoints
+
+What We'd Redo:
+• Streaming ML with online learning
+• Neural network (two-tower model) instead of KNN
+• End-to-end integration tests from day 1
+• Build security in from M1, not retrofit in M5
+
+Team Contributions:
+• Faran: Kafka infrastructure, Docker, CI/CD
+• Rahman: ML models, evaluation, drift detection
+• Aigerim: Flask API, Prometheus monitoring, A/B testing
+
+=====================================================
+
+SLIDE 8: CONCLUSIONS
+--------------------
+✓ Both fairness requirements pass
+   • 100% catalog coverage
+   • 0.018 parity gap
+
+⚠️ Feedback loops detected and mitigated
+   • Echo chamber forming (Gini slope +0.0146)
+   • Tail starvation risk identified
+
+✓ Security analysis complete
+   • Comprehensive threat model
+   • Spam detection working
+   • 3/7 mitigations implemented
+
+Biggest Lesson:
+Production ML is 10% modeling, 90% engineering
+
+System passes all SLAs:
+• 99% uptime ✓
+• <100ms latency ✓
+• Fairness requirements ✓
+
+=====================================================

@@ -1,0 +1,89 @@
+=====================================================
+MILESTONE 5 - QUICK REFERENCE GUIDE
+=====================================================
+
+YOUR M5 DELIVERABLES ARE READY!
+
+What you already have:
+✓ MILESTONE5_REPORT.md - Your main report (convert to PDF)
+✓ REFLECTION.md - Your team reflection (~750 words)
+✓ 5 PNG visualizations (fairness, feedback loops, security)
+✓ 3 JSON analysis results
+✓ 3 Python analysis modules in /recommender/
+
+=====================================================
+TO RECREATE EVERYTHING (if needed):
+=====================================================
+
+Run these commands in terminal:
+
+cd /home/user/ml-recommender-prod
+python3 recommender/fairness_analysis.py
+python3 recommender/feedback_loop_detection.py
+python3 recommender/security_analysis.py
+
+This generates:
+- fairness_analysis_results.json
+- fairness_popularity_bias.png
+- fairness_model_parity.png
+- feedback_loop_analysis_results.json
+- feedback_loop_popularity_echo.png
+- feedback_loop_tail_starvation.png
+- security_analysis_results.json
+- security_rating_spam_detection.png
+
+=====================================================
+WHAT YOU STILL NEED TO CREATE:
+=====================================================
+
+1. PDF REPORT (≤6 pages):
+   - Open MILESTONE5_REPORT.md in any markdown viewer
+   - Export/Print to PDF
+   - Or use: pandoc MILESTONE5_REPORT.md -o MILESTONE5_REPORT.pdf
+   - Include the 5 PNG visualizations in the PDF
+
+2. POWERPOINT SLIDES:
+   Create slides covering:
+   - Title slide (Team: Project Group 6, Members: Faran Mohammed, Rahman Mohammed Abdul, Aigerim Mendygaliyeva)
+   - System Architecture (show Kafka → Flask → Model Registry → Monitoring)
+   - Fairness Analysis Results (Coverage: 100%, Parity: 0.018)
+   - Feedback Loops Detected (Echo chamber, tail starvation)
+   - Security Threats & Mitigations
+   - Demo walkthrough
+   - Team Reflection highlights
+
+3. DEMO VIDEO (5-8 minutes):
+   Record all 3 team members showing:
+   - Live system running
+   - API endpoints working
+   - A/B test results
+   - Fairness metrics from analysis
+   - Feedback loop detection
+   - Security spam detection demo
+   - Monitoring dashboard
+
+=====================================================
+FINAL SUBMISSION CHECKLIST:
+=====================================================
+
+Submit to Canvas:
+[ ] PDF report (≤6 pages)
+[ ] PowerPoint slides
+[ ] Video link (YouTube/Google Drive)
+[ ] GitHub repo link (your current branch or main)
+
+All files are live and working!
+
+=====================================================
+TEAM INFO:
+=====================================================
+
+Team: Project Group 6
+Members:
+- Faran Mohammed
+- Rahman Mohammed Abdul
+- Aigerim Mendygaliyeva
+
+Branch: claude/investigate-code-functionality-015PDAVpVQSyB9aDjifQpwSg
+
+=====================================================
