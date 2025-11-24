@@ -1,8 +1,8 @@
 # Milestone 5: Responsible ML Analysis
 ## ML Recommender Production System
 
-**Team:** [ADD YOUR TEAM NAME HERE]
-**Members:** [ADD TEAM MEMBER NAMES]
+**Team:** Project Group 6
+**Members:** Faran Mohammed, Rahman Mohammed Abdul, Aigerim Mendygaliyeva
 **Date:** November 24, 2025
 
 ---
