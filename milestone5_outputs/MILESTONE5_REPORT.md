@@ -1,198 +1,181 @@
 # Milestone 5: Responsible ML Analysis
-## ML Recommender Production System
 
 **Team:** Project Group 6
 **Members:** Faran Mohammed, Rahman Mohammed Abdul, Aigerim Mendygaliyeva
-**Date:** November 24, 2025
 
 ---
 
-## 1. Fairness Requirements
+## Fairness Requirements
 
-### 1.1 Identified Harms
+### Identified Harms
 
-| Harm | Severity | Affected Groups | Detection Method |
-|------|----------|-----------------|------------------|
-| **Popularity Bias** | HIGH | Indie creators, niche users | Gini coefficient, coverage |
-| **Filter Bubbles** | MEDIUM | All users | Diversity metrics over time |
-| **Cold-Start Inequality** | MEDIUM | New/infrequent users | Quality by user tenure |
-| **Creator Starvation** | HIGH | Independent creators | Item adoption rates |
-| **Temporal Bias** | LOW | Classic content seekers | Age distribution monitoring |
+Our system has several potential fairness issues:
 
-### 1.2 Proxy Features
+1. **Popularity Bias** - Popular movies get recommended way more than niche films. This hurts indie content creators.
+2. **Filter Bubbles** - Users only see similar content, never anything different
+3. **Cold-Start Problem** - New users and new movies get worse recommendations
+4. **Creator Starvation** - Small creators never get enough views to break through
 
-| Feature | Proxy For | Risk | Mitigation |
-|---------|-----------|------|------------|
-| `user_id` | Demographics, location | Non-random correlation | Randomized IDs, monitoring |
-| `timestamp` | Time zone, schedule | Time zone disadvantage | 24/7 model performance |
-| `interaction_frequency` | Digital access, free time | Favor high-activity users | Cold-start strategies |
-| `historical_ratings` | Cultural background | Biased exposure | Diversity injection |
+### Proxy Features
 
-### 1.3 Fairness Requirements with Metrics
+Features that could cause unfair outcomes:
+- `user_id` - might correlate with demographics if IDs aren't random
+- `timestamp` - could disadvantage certain time zones
+- `interaction_frequency` - favors users with more free time
+- `historical_ratings` - reflects past biases
 
-**System-Level: Exposure Fairness**
-- **Requirement:** Minimum 80% catalog coverage within 1000 recommendations
-- **Metric:** Coverage = (Unique Items Recommended) / (Total Catalog Items)
-- **Result:** **100% coverage** ✓ PASS
-- **Evidence:** See `fairness_analysis_results.json`, Gini coefficient = 0.229
+### Fairness Requirements
 
-**Model-Level: Demographic Parity**
-- **Requirement:** Diversity parity gap < 0.15 across user segments
-- **Metric:** Parity Gap = max(Diversity) - min(Diversity) across low/med/high activity users
-- **Result:** **0.018 parity gap** ✓ PASS
-- **Evidence:** All segments (low/med/high activity) have similar diversity scores (0.47-0.49)
+**System-Level: Catalog Coverage**
+- Requirement: At least 80% of catalog items should appear in recommendations
+- Metric: Coverage = (unique recommended items) / (total items)
+- Result: 100% coverage ✓
+- Analysis: See fairness_analysis_results.json
 
----
+**Model-Level: User Segment Parity**
+- Requirement: Diversity parity gap < 0.15 across user activity levels
+- Metric: max(diversity_scores) - min(diversity_scores)
+- Result: 0.018 parity gap ✓
+- Analysis: Low, medium, and high activity users all get similar diversity (0.47-0.49)
 
-## 2. Fairness Improvements
-
-### Collection-Level Actions
-- Reserve 10-20% of data collection for underrepresented items
-- Active learning to sample tail item ratings strategically
-- Balanced temporal sampling to prevent recency bias
-
-### Design-Level Actions
-- **Diversity Re-Ranking:** Maximal Marginal Relevance (λ=0.7)
-- **Exposure Constraints:** 60% head, 30% mid, 10% tail distribution
-- **Exploration Bonuses:** ε-greedy (ε=0.15, increasing to 0.25 for new users)
-
-### Monitoring-Level Actions
-- Real-time fairness dashboards (Gini, coverage, parity over 24h windows)
-- Alert if coverage <75% or parity gap >0.20
-- A/B testing: Model B (100% coverage) vs Model A (83% coverage)
+Both requirements pass.
 
 ---
 
-## 3. Fairness Analysis Using Telemetry
+## Fairness Improvements
 
-**Methodology:** Analyzed Kafka telemetry from `project_group_6.reco_responses` topic
+**What we could do:**
 
-**Results:**
+Collection:
+- Sample more ratings from underrepresented items
+- Active learning to get feedback on tail items
 
-![Fairness Analysis](fairness_popularity_bias.png)
+Design:
+- Diversity re-ranking using MMR algorithm
+- Reserve 10% of recommendations for tail items
+- Add exploration bonus (epsilon-greedy with ε=0.15)
 
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| Coverage | 100% | ≥80% | ✓ PASS |
-| Gini Coefficient | 0.229 | <0.50 | ✓ PASS |
-| Top 20% Concentration | 32.2% | <50% | ✓ PASS |
-| Parity Gap | 0.018 | <0.15 | ✓ PASS |
-
-**Interpretation:** System achieves full catalog coverage with low inequality. No systematic bias against low-activity users.
+Monitoring:
+- Track coverage and parity gap over time
+- Alert if coverage drops below 75%
+- Our A/B test shows Model B (100% coverage) beats Model A (83% coverage, p=0.0017)
 
 ---
 
-## 4. Feedback Loops
+## Fairness Analysis
+
+We analyzed our Kafka telemetry data. The results show both fairness requirements pass:
+
+- Coverage: 100% (target: 80%) ✓
+- Gini coefficient: 0.229 (low inequality)
+- Parity gap: 0.018 (target: <0.15) ✓
+
+See the plots: fairness_popularity_bias.png and fairness_model_parity.png
+
+---
+
+## Feedback Loops
 
 ### Loop 1: Popularity Echo Chamber
-**Mechanism:** Popular items → More recommendations → More watches → Higher ratings → Even more popular
-**Detection:** Track Gini coefficient over time windows; positive slope = echo forming
-**Early Warning:** Gini slope >0.01, top-10 share increasing >5%
 
-### Loop 2: Long-Tail Item Starvation
-**Mechanism:** New items → No data → No predictions → No recommendations → Stuck in cold-start
-**Detection:** Measure recommendation rate by item category (head/mid/tail); head/tail ratio >3.0 indicates starvation
-**Early Warning:** Tail recommendation rate <20%, increasing items with zero recommendations
+**How it works:** Popular items → more recommendations → more views → more ratings → even more popular
 
----
+**Detection:** Track concentration over time using Gini coefficient. If Gini slope > 0.01, echo chamber is forming.
 
-## 5. Loop Analysis Using Telemetry
+**Our analysis:** Gini slope = +0.0146, indicating concentration is increasing ⚠️
 
-**Echo Chamber Detection:**
-- Analyzed temporal recommendation patterns across 4 time windows (T1→T4)
-- **Finding:** Gini slope = +0.0146 (increasing concentration)
-- **Status:** ⚠️ **Echo chamber DETECTED** - concentration increasing over time
+### Loop 2: Long-Tail Starvation
 
-![Feedback Loop Analysis](feedback_loop_popularity_echo.png)
+**How it works:** New items → no data → no predictions → no recommendations → stuck
 
-| Window | Gini | Top-10 Share |
-|--------|------|--------------|
-| T1 | 0.267 | 28.0% |
-| T4 | 0.308 | 33.6% |
+**Detection:** Compare recommendation rates for head vs tail items. If ratio > 3x, tail is starving.
 
-**Tail Starvation Detection:**
-- HEAD items: 80% recommendation rate
-- TAIL items: 52% recommendation rate
-- Head/Tail Ratio: 1.54x
-- **Status:** ⚠️ **Starvation risk** detected
-
-**Mitigations Deployed:**
-- Automated retraining every 3 hours (prevents bias accumulation)
-- A/B testing diversity re-ranking (Model B shows 100% coverage)
+**Our analysis:** Head/Tail ratio = 1.54x, some starvation risk ⚠️
 
 ---
 
-## 6. Security Threat Model & Mitigations
+## Loop Analysis
 
-### Kafka Infrastructure
-- **Message Injection:** Fake events poison training → **Mitigation:** Pandera schema validation ✓
-- **Unauthorized Access:** Rogue consumers → **Mitigation:** SASL auth, ACLs (planned)
-- **Data Tampering:** Modified messages → **Mitigation:** TLS/SSL encryption (planned)
+Used Kafka logs to detect both loops:
 
-### API Endpoints
-- **Rate Abuse:** Excessive requests → **Mitigation:** Rate limiting (100/min) - planned
-- **Model Inference Attack:** Reverse engineering → **Mitigation:** Query limits, noise injection
-- **Injection Attacks:** SQL/NoSQL → **Mitigation:** Input validation (whitelisting)
+**Echo Chamber:** Analyzed recommendations over 4 time windows. Concentration increasing from T1 to T4 (Gini: 0.267 → 0.308, Top-10 share: 28% → 33.6%). Echo detected ⚠️
 
-### Model Registry
-- **Model Poisoning:** Backdoored models → **Mitigation:** Cryptographic signing (planned)
-- **Unauthorized Access:** IP theft → **Mitigation:** Access control, encryption at rest
-- **Supply Chain Attack:** Compromised dependencies → **Mitigation:** Dependency pinning ✓
+**Tail Starvation:** Head items get 80% recommendation rate vs 52% for tail items. Ratio of 1.54x shows some starvation happening ⚠️
 
-### Model Attack: Rating Spam/Poisoning
-**Attack Vector:** Fake accounts flood target items with extreme ratings
-**Detection Methods:**
-1. Volume outliers (>3σ above mean)
-2. Burst patterns (10+ ratings in <1 hour)
-3. Extreme distributions (std <0.5)
+**Mitigations deployed:**
+- Automatic retraining every 3 hours prevents bias accumulation
+- A/B testing diversity improvements (Model B has 100% coverage)
+
+---
+
+## Security Threat Model
+
+**Kafka Threats:**
+- Message injection (fake events) → Mitigation: Schema validation with Pandera ✓
+- Unauthorized access → Mitigation: Need SASL auth (not implemented yet)
+- Data tampering → Mitigation: Need TLS encryption (not implemented yet)
+
+**API Threats:**
+- Rate abuse → Mitigation: Need rate limiting (100/min) - not implemented
+- Model inference attacks → Mitigation: Query limits, noise injection
+- SQL injection → Mitigation: Input validation (whitelisting)
+
+**Model Registry Threats:**
+- Model poisoning → Mitigation: Need cryptographic signing - not implemented
+- Unauthorized access → Mitigation: Access control, encryption
+- Supply chain attacks → Mitigation: Dependency pinning in requirements.txt ✓
+
+**Model Attack: Rating Spam**
+
+Attackers could flood target items with fake ratings to manipulate recommendations.
+
+**Detection methods:**
+1. Volume outliers (>3 standard deviations)
+2. Burst patterns (10+ ratings in 1 hour)
+3. Extreme distributions (all 5-star or all 1-star)
 
 **Mitigations:**
-- Pre-training filtering (exclude flagged users)
+- Filter flagged users from training
 - Rate limiting (20 ratings/hour max)
-- CAPTCHA for burst patterns
-- Anomaly detection ✓ (implemented)
+- CAPTCHA for suspicious patterns
 
 ---
 
-## 7. Security Analysis Using Telemetry
+## Security Analysis
 
-**Rating Spam Detection:**
-- Analyzed 100 simulated users (demonstrating detection capability)
-- **Detected:** 10 spam users (10% of user base)
-- **Method:** Statistical outlier detection (>3σ threshold)
-- **Status:** ⚠️ **Attack detection working**
+We simulated a spam attack and tested our detection:
 
-![Security Analysis](security_rating_spam_detection.png)
+- Total users: 100
+- Spam users detected: 10 (10%)
+- Detection method: >3σ outlier detection
 
-**Evidence:** `security_analysis_results.json` shows flagged user IDs
+Attack successfully detected ✓
 
-**Actions Taken:**
-- Exclude flagged users from training
-- Alert security team for investigation
-- Implement CAPTCHA for high-volume users (future work)
+See security_rating_spam_detection.png for breakdown.
+
+**Currently implemented mitigations:**
+1. Pandera schema validation for Kafka ✓
+2. Provenance tracking (git SHA, model version) ✓
+3. Dependency pinning ✓
+
+**Still needed:**
+- Rate limiting
+- SASL authentication
+- Model file signing
 
 ---
 
 ## Summary
 
-**Fairness:** ✓ Both requirements PASS (coverage 100%, parity 0.018)
-**Feedback Loops:** ⚠️ Echo chamber detected; mitigations deployed (retraining, A/B testing)
-**Security:** ⚠️ Threat model complete; spam detection working; 3 mitigations implemented
+**Fairness:** Both requirements pass (coverage 100%, parity 0.018)
 
-**Key Achievements:**
-- Full catalog coverage (100%) eliminates creator starvation
-- Low parity gap (0.018) ensures fairness across user segments
-- Working security detection (spam users, outliers)
-- Comprehensive threat model across Kafka/API/Registry
+**Feedback Loops:** Echo chamber detected, tail starvation risk identified. Mitigated by 3-hour retraining and A/B testing.
 
-**Next Steps:**
-1. Implement rate limiting for API endpoints
-2. Enable SASL authentication for Kafka
-3. Deploy diversity re-ranking to production
-4. Add cryptographic signing for model registry
+**Security:** Comprehensive threat model created. Spam detection working. 3 mitigations implemented, several more needed.
 
----
-
-**Report Generated:** November 24, 2025
-**Analysis Code:** `recommender/fairness_analysis.py`, `feedback_loop_detection.py`, `security_analysis.py`
-**Outputs:** `milestone5_outputs/` (8 files: 3 JSON, 5 PNG)
+**Files:**
+- fairness_analysis_results.json
+- feedback_loop_analysis_results.json
+- security_analysis_results.json
+- 5 PNG visualization plots
+- 3 Python analysis modules in /recommender/
