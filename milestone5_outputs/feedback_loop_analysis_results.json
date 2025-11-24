@@ -1,0 +1,41 @@
+{
+  "popularity_echo": {
+    "window_stats": {
+      "T1": {
+        "gini": 0.23952380952380947,
+        "top10_share": 0.248,
+        "unique_items": 84
+      },
+      "T2": {
+        "gini": 0.24083720930232566,
+        "top10_share": 0.264,
+        "unique_items": 86
+      },
+      "T3": {
+        "gini": 0.2634936708860758,
+        "top10_share": 0.28,
+        "unique_items": 79
+      },
+      "T4": {
+        "gini": 0.24950000000000006,
+        "top10_share": 0.264,
+        "unique_items": 80
+      }
+    },
+    "gini_slope": 0.005258503301232181,
+    "echo_detected": false
+  },
+  "tail_starvation": {
+    "categories": {
+      "head": 55,
+      "mid": 145,
+      "tail": 0
+    },
+    "rec_rates": {
+      "head": 0.8,
+      "mid": 0.69,
+      "tail": 0.52
+    },
+    "starvation_ratio": 1.5384615384615385
+  }
+}
