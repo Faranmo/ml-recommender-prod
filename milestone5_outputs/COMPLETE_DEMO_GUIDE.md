@@ -372,7 +372,8 @@ Thank you! We're happy to take questions."
 cd /home/user/ml-recommender-prod
 python app.py
 ```
-Wait for "Running on http://127.0.0.1:5000"
+Wait for "Running on http://127.0.0.1:8000" (Codespaces uses port 8000)
+Click "Open in Browser" when the notification pops up
 
 **Terminal 2: Have commands ready**
 This is where you'll run demo commands (see below)
@@ -430,7 +431,7 @@ ls -la
 
 **In Terminal 2, run:**
 ```bash
-curl -X POST http://localhost:5000/rate \
+curl -X POST http://localhost:8000/rate \
   -H 'Content-Type: application/json' \
   -d '{"user_id": "demo_user", "item_id": "movie_123", "rating": 5, "timestamp": "2025-11-24T10:00:00"}'
 ```
@@ -440,7 +441,7 @@ curl -X POST http://localhost:5000/rate \
 
 **Run:**
 ```bash
-curl http://localhost:5000/recommend?user_id=demo_user&k=10
+curl http://localhost:8000/recommend?user_id=demo_user&k=10
 ```
 
 **Aigerim says:**
@@ -456,7 +457,7 @@ cat ab_test_results.json
 
 **Run:**
 ```bash
-curl http://localhost:5000/metrics | head -20
+curl http://localhost:8000/metrics | head -20
 ```
 
 **Aigerim says:**
