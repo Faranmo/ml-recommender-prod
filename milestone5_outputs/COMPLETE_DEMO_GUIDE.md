@@ -401,12 +401,12 @@ Open these files in separate browser tabs (download from GitHub first):
 ---
 
 ### [0:30-1:30] SHOW SYSTEM ARCHITECTURE
-**Rahman screen shares Codespaces**
+**Faran screen shares Codespaces (Faran will drive ALL the demo)**
 
-**Rahman says:**
-"Let me show you our system architecture. I'm in Codespaces right now."
+**Rahman says (voice-over while Faran shows the screen):**
+"Let me explain our system architecture while Faran shows you the code."
 
-**In Codespaces, open these files and show them:**
+**Faran runs in Terminal:**
 ```bash
 # Show app.py (the Flask API)
 cat app.py | head -30
@@ -424,12 +424,12 @@ ls -la
 ---
 
 ### [1:30-3:00] DEMO API ENDPOINTS
-**Aigerim takes over screen share**
+**Faran continues screen share (still driving)**
 
-**Aigerim says:**
-"Now I'll demonstrate our API endpoints. First, let me submit a rating."
+**Aigerim says (voice-over while Faran types):**
+"Now we'll demonstrate our API endpoints. First, submitting a rating."
 
-**In Terminal 2, run:**
+**Faran runs in Terminal:**
 ```bash
 curl -X POST http://localhost:8000/rate \
   -H 'Content-Type: application/json' \
@@ -466,17 +466,17 @@ curl http://localhost:8000/metrics | head -20
 ---
 
 ### [3:00-4:30] SHOW FAIRNESS ANALYSIS
-**Aigerim continues, switches to browser to show PNG images**
+**Faran continues screen share, switches to browser to show PNG images**
 
-**Aigerim says:**
-"Now let me show you our fairness analysis results."
+**Aigerim says (voice-over while Faran shows the images):**
+"Now I'll explain our fairness analysis results."
 
-**Show fairness_popularity_bias.png on screen**
+**Faran shows fairness_popularity_bias.png on screen**
 
 **Aigerim says:**
 "This graph shows our catalog coverage is 100%, beating our 80% target. Our Gini coefficient is 0.229, which indicates low inequality in how we distribute recommendations."
 
-**Show fairness_model_parity.png**
+**Faran shows fairness_model_parity.png**
 
 **Aigerim says:**
 "This graph shows diversity parity across user segments. Low, medium, and high activity users all receive similar diversity scores. Our parity gap is just 0.018, well below our 0.15 threshold. Both fairness requirements pass."
@@ -484,17 +484,17 @@ curl http://localhost:8000/metrics | head -20
 ---
 
 ### [4:30-6:00] SHOW FEEDBACK LOOPS
-**Faran takes over**
+**Faran continues screen share (still driving), switches to feedback loop images**
 
 **Faran says:**
 "Thanks Aigerim. Now I'll show you the feedback loops we detected."
 
-**Show feedback_loop_popularity_echo.png**
+**Faran shows feedback_loop_popularity_echo.png**
 
 **Faran says:**
 "This graph tracks the Gini coefficient over four time windows. You can see it's increasing from 0.267 to 0.308, with a slope of +0.0146. This indicates a popularity echo chamber is forming - popular items are getting more and more concentrated in recommendations over time."
 
-**Show feedback_loop_tail_starvation.png**
+**Faran shows feedback_loop_tail_starvation.png**
 
 **Faran says:**
 "This graph shows recommendation rates for head versus tail items. Head items get recommended 80% of the time, while tail items only get recommended 52% of the time. That's a 1.54x ratio, indicating moderate tail starvation - unpopular items are struggling to get visibility."
@@ -505,17 +505,17 @@ curl http://localhost:8000/metrics | head -20
 ---
 
 ### [6:00-7:00] SHOW SECURITY ANALYSIS
-**Rahman takes over**
+**Faran continues screen share (still driving)**
 
-**Rahman says:**
-"Now let me show you our security threat modeling and spam detection."
+**Rahman says (voice-over while Faran shows the screen):**
+"Now I'll explain our security threat modeling and spam detection."
 
-**Show security_rating_spam_detection.png**
+**Faran shows security_rating_spam_detection.png**
 
 **Rahman says:**
 "We simulated a rating spam attack with 100 users, 10 of which were spammers flooding the system with fake ratings. Our 3-sigma outlier detection correctly identified all 10 spam users. You can see them highlighted in red on this graph."
 
-**Back to terminal, show analysis results:**
+**Faran switches back to terminal and runs:**
 ```bash
 cat milestone5_outputs/security_analysis_results.json
 ```
@@ -526,12 +526,12 @@ cat milestone5_outputs/security_analysis_results.json
 ---
 
 ### [7:00-7:30] SHOW MODEL REGISTRY
-**Rahman continues**
+**Faran continues screen share (still driving)**
 
-**Rahman says:**
-"Finally, let me show you our model registry with automated versioning."
+**Rahman says (voice-over while Faran types):**
+"Finally, I'll explain our model registry with automated versioning."
 
-**Run:**
+**Faran runs:**
 ```bash
 ls -lh model_registry/models/
 ```
