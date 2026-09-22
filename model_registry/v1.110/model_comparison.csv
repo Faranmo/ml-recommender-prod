@@ -1,0 +1,9 @@
+model,metric,value
+Popularity,Top@5,"[1062, 1079, 1046, 1047, 1023]"
+Item-Item CF,RMSE,0.8727005500170147
+Item-Item CF,Training Time (s),0.0
+Item-Item CF,CPU Usage (%),0
+Item-Item CF,Model Size (KB),10.79
+Item-Item CF,Inference Latency (ms),0.0063
+Item-Item CF,Hit Rate@5,0.6
+Item-Item CF,NDCG@5,1.0
